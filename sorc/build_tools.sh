@@ -129,8 +129,13 @@ if [ -d "${TOOLS_PATH}/build" ]; then
 fi
 mkdir ${TOOLS_PATH}/build
 cd ${TOOLS_PATH}/build
-cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc
-make -j 8
+if [ $target = wcoss_cray ]; then
+  cmake .. -DCMAKE_Fortran_COMPILER=ftn -DCMAKE_C_COMPILER=cc
+else
+  cmake .. -DCMAKE_Fortran_COMPILER=ftn -DCMAKE_C_COMPILER=mpicc
+fi
+#make -j 8 
+make -j 8 VERBOSE=1
 make install
 
 exit

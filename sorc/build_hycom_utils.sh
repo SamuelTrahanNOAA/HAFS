@@ -39,8 +39,12 @@ if [ -d "build" ]; then
 fi
 mkdir build
 cd build
-cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc
-make -j 8
+if [ $target = wcoss_cray ]; then
+   cmake .. -DCMAKE_Fortran_COMPILER=ftn -DCMAKE_C_COMPILER=cc
+else
+   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc
+fi
+make -j 8 VERBOSE=1
 
 cd ${cwd}/hafs_hycom_utils.fd
 if [ -d "build" ]; then
@@ -48,8 +52,12 @@ if [ -d "build" ]; then
 fi
 mkdir build
 cd build
-cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc
-make -j 8
+if [ $target = wcoss_cray ]; then
+  cmake .. -DCMAKE_Fortran_COMPILER=ftn -DCMAKE_C_COMPILER=cc
+else
+  cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc
+fi
+make -j 8 VERBOSE=1
 make install
 
 # Ensure a clean compile:

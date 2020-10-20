@@ -6,6 +6,7 @@ proc ModulesHelp { } {
 }
 module-whatis "hycom_utils prerequisites"
 
+module load cmake/3.16.2
 module load craype-network-aries
 module load craype-sandybridge
 module load craype/2.3.0
@@ -16,6 +17,8 @@ module load cray-mpich/7.2.0
 module load jasper-gnu-sandybridge/1.900.1
 module load png-intel-sandybridge/1.2.49
 module load zlib-intel-sandybridge/1.2.7
+setenv PNG_ROOT /usrx/local/prod//png/1.2.49/intel/sandybridge
+setenv Jasper_ROOT /usrx/local/prod//jasper/1.900.1/gnu/sandybridge
 
 module load g2-intel/3.1.0
 module load w3emc-intel/2.2.0

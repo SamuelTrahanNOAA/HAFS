@@ -40,7 +40,8 @@ target_link_libraries(
   g2_4
   w3emc_4
   ${JASPER_LIBRARIES}
-  png
+  ${PNG_LIBRARIES}
+  z
   MPI::MPI_Fortran)
 
 install(TARGETS ${exe_name} DESTINATION ${exe_dir})

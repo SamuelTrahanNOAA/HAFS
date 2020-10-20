@@ -50,7 +50,6 @@ elif [ $target = orion ]; then
     export hwrf_g2_inc=/work/noaa/hwrf/noscrub/bthomas/H220/sorc/hwrf-utilities/libs/mods/g2
     export hwrf_g2_lib=/work/noaa/hwrf/noscrub/bthomas/H220/sorc/hwrf-utilities/libs/libg2.a
 
-
 elif [ $target = jet ]; then
 
     targetx=jet
@@ -141,6 +140,8 @@ if [ $target = hera ]; then
   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc -Dhwrf_g2_lib=$hwrf_g2_lib -Dhwrf_g2_inc=$hwrf_g2_inc 
 elif [ $target = orion ]; then
   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc -Dhwrf_g2_lib=$hwrf_g2_lib -Dhwrf_g2_inc=$hwrf_g2_inc
+elif [ $target = wcoss_cray ]; then
+  cmake .. -DCMAKE_Fortran_COMPILER=ftn -DCMAKE_C_COMPILER=cc
 else
   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc
 fi
