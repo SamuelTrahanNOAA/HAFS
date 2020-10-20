@@ -132,7 +132,7 @@ cd ${TOOLS_PATH}/build
 if [ $target = wcoss_cray ]; then
   cmake .. -DCMAKE_Fortran_COMPILER=ftn -DCMAKE_C_COMPILER=cc
 else
-  cmake .. -DCMAKE_Fortran_COMPILER=ftn -DCMAKE_C_COMPILER=mpicc
+  cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc
 fi
 #make -j 8 
 make -j 8 VERBOSE=1
