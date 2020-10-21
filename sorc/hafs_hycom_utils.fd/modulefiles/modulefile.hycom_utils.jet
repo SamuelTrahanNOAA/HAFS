@@ -6,6 +6,7 @@ proc ModulesHelp { } {
 }
 module-whatis "hycom_utils prerequisites"
 
+module load cmake/3.16.1
 setenv COREPATH /lfs4/HFIP/hfv3gfs/nwprod/NCEPLIBS/modulefiles
 setenv NCEPLIBS /lfs4/HFIP/hfv3gfs/nwprod/NCEPLIBS/modulefiles
 module use /lfs4/HFIP/hfv3gfs/nwprod/NCEPLIBS/modulefiles
