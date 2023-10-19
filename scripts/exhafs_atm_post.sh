@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -xe
 
@@ -190,11 +190,14 @@ if [ ${write_dopost:-.false.} = .true. ]; then
 
 # Wait for model output
 n=1
-hurf=${INPdir}/HURPRS${neststr}.GrbF${FHR2}
+hurf=${INPdir}/HURPRS.GrbF${FHR2}${neststr}
 while [ $n -le 360 ]; do
-  logf=$( ls -1 ${INPdir}/log*f${FHR3} || echo "MISSING" )
-  if [[ "$logf" -eq MISSING || ! -s "$logf" || ! -s "$hurf" ]]; then
-    echo "${INPdir}/log*f${FHR3} not ready, sleep 10s"
+  logf=${INPdir}/log.atm.inlinepost.f${FHR3}
+  if ! test -s "$logf" ; then
+    echo "${logf} not ready, sleep 10s"
+    sleep 10s
+  elif ! test -s "$hurf" ; then
+    echo "${hurf} not ready, sleep 10s"
     sleep 10s
   else
     echo "$logf, $hurf ready, continue"
@@ -242,9 +245,9 @@ cd ${DATA_POST}
 # Note: Currently the inline post (write_dopost) does not support nesting configurations yet.
 if [ ${write_dopost:-.false.} = .true. ]; then
 
-${NCP} -p ${INPdir}/HURPRS${neststr}.GrbF${FHR2} ${grb2post}
+${NCP} -p ${INPdir}/HURPRS.GrbF${FHR2}${neststr} ${grb2post}
 if [ ${satpost} = .true. ]; then
-  ${NCP} -p ${INPdir}/HURSAT${neststr}.GrbF${FHR2} ${sat_grb2post}
+  ${NCP} -p ${INPdir}/HURSAT.GrbF${FHR2}${neststr} ${sat_grb2post}
 fi
 
 else
