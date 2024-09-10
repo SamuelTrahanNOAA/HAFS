@@ -1087,6 +1087,10 @@ if [ ! ${FORECAST_RESTART} = YES ] && [ ${warmstart_from_restart} = yes ]; then
     ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_srf_wnd.res.nest$(printf %02d ${n}).tile${n}.nc ./fv_srf_wnd.res.nest$(printf %02d ${n}).tile${n}.nc
     ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_core.res.nest$(printf %02d ${n}).tile${n}.nc ./fv_core.res.nest$(printf %02d ${n}).tile${n}.nc
     ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_tracer.res.nest$(printf %02d ${n}).tile${n}.nc ./fv_tracer.res.nest$(printf %02d ${n}).tile${n}.nc
+    rm -f ./phy_data.nest$(printf %02d ${n}).tile${n}.nc
+    ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.phy_data.nest$(printf %02d ${n}).tile${n}.nc ./phy_data.nest$(printf %02d ${n}).tile${n}.nc
+    rm -f ./sfc_data.nest$(printf %02d ${n}).tile${n}.nc
+    ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.sfc_data.nest$(printf %02d ${n}).tile${n}.nc ./sfc_data.nest$(printf %02d ${n}).tile${n}.nc
   # ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.phy_data.nest$(printf %02d ${n}).tile${n}.nc ./phy_data.nest$(printf %02d ${n}).tile${n}.nc
   # ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.sfc_data.nest$(printf %02d ${n}).tile${n}.nc ./sfc_data.nest$(printf %02d ${n}).tile${n}.nc
   # if [ -e ${RESTARTinp}/${YMD}.${hh}0000.fv_BC_ne.res.nest$(printf %02d ${n}).nc ]; then
