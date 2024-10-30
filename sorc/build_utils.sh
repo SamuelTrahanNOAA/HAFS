@@ -10,8 +10,9 @@ if [[ ! -s hafs_utils.fd/modulefiles/build.gaea.intel.lua ]] ; then
     pushd hafs_utils.fd
     patch -p1 < ../customizations/hafs_utils.fd/gaea-c5-patch.diff
     popd
-    cp -fp customizations/hafs_utils.fd/build.gaea-c5.intel.lua hafs_utils.fd/modulefiles/build.gaea.intel.lua
 fi
+
+cp -fp customizations/hafs_utils.fd/build.gaea-c5.intel.lua hafs_utils.fd/modulefiles/build.gaea.intel.lua
 
 cd hafs_utils.fd
 

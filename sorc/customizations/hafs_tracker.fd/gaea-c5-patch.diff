@@ -2,17 +2,6 @@ diff --git a/src/build_all_cmake.sh b/src/build_all_cmake.sh
 index 01a7bd7..818d59c 100755
 --- a/src/build_all_cmake.sh
 +++ b/src/build_all_cmake.sh
-@@ -1,8 +1,8 @@
- #!/bin/sh
- 
--set -eux
-+# Do not set -eu on GAEA C5 or it'll fail.
- source ./machine-setup.sh > /dev/null 2>&1
--
-+set -uex
- 
- module use ../modulefiles
- module load $target
 @@ -24,7 +24,12 @@ elif [ $target = jet ]; then
  elif [ $target = wcoss2 ] ; then
    export FC=ftn

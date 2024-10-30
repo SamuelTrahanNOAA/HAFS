@@ -6,13 +6,13 @@ help([[
 whatis("Description: HAFS Application environment")
 
 --- prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
-prepend_path("MODULEPATH", "/autofs/ncrc-svm1_proj/epic/spack-stack/spack-stack-1.6.0/envs/g2tmpl-addon-env/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/spack-stack-1.6.0/envs/g2tmpl-addon-env/install/modulefiles/Core")
 prepend_path("MODULEPATH", "/ncrc/proj/gsl-glo/hafs/soft/modulefiles/")
 
-stack_intel_ver=os.getenv("stack_intel_ver") or "2023.1.0"
+stack_intel_ver=os.getenv("stack_intel_ver") or "2023.2.0"
 load(pathJoin("stack-intel", stack_intel_ver))
 
-stack_cray_mpich_ver=os.getenv("stack_cray_mpich_ver") or "8.1.25"
+stack_cray_mpich_ver=os.getenv("stack_cray_mpich_ver") or "8.1.28"
 load(pathJoin("stack-cray-mpich", stack_cray_mpich_ver))
 
 stack_python_ver=os.getenv("stack_python_ver") or "3.10.13"
