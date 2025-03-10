@@ -279,6 +279,7 @@ cat>./fort.41<<EOF
  regional=${regional}
  halo_bndy=${halo_bndy}
  halo_blend=${halo_blend}
+ thomp_mp_climo_file="${thomp_mp_climo_input:-$FIXhafs/fix_am/Thompson_MP_MONTHLY_CLIMO.nc}"
 /
 EOF
 
@@ -376,6 +377,7 @@ cat>./fort.41<<EOF
  regional=${regional}
  halo_bndy=${halo_bndy}
  halo_blend=${halo_blend}
+ thomp_mp_climo_file="${thomp_mp_climo_input:-$FIXhafs/fix_am/Thompson_MP_MONTHLY_CLIMO.nc}"
 /
 EOF
 #${NCP} -p ${CHGRESCUBEEXEC} ./hafs_utils_chgres_cube.x

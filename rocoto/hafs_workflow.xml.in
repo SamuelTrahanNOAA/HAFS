@@ -12,7 +12,7 @@
   <!-- Maximum number of times to try various jobs -->
   <!ENTITY MAX_TRIES_TRANSFER "6"> <!-- pulling data over network -->
   <!ENTITY MAX_TRIES_BIG_JOBS "1"> <!-- forecast or other huge jobs -->
-  <!ENTITY MAX_TRIES "1"> <!-- everything else -->
+  <!ENTITY MAX_TRIES "2"> <!-- everything else -->
 
  <!-- Extra variables to send to the exhwrf_launch.py -->
   <!ENTITY MORE_LAUNCH_VARS "@[MORE_LAUNCH_VARS]">
@@ -92,11 +92,14 @@
   <!ENTITY RUN_EMCGRAPHICS "@[RUN_EMCGRAPHICS:-NO]">
   <!ENTITY MAKE_MESH_ATM "@[MAKE_MESH_ATM]">
   <!ENTITY MAKE_MESH_OCN "@[MAKE_MESH_OCN]">
+  <!ENTITY RUN_PYGRAF "@[RUN_PYGRAF]">
 
   <!ENTITY ENS_SIZE "@[ENS_SIZE]">
   <!ENTITY ENSIDS "@[ENSIDS]">
 
   <!ENTITY gtype "@[gtype:-regional]">
+  <!ENTITY ATM_POST_RESOURCES "&@[ATM_POST_RESOURCES:-ATM_POST_STANDARD_RESOURCES];">
+  <!ENTITY ATM_IC_RESOURCES "&@[ATM_IC_RESOURCES:-ATM_IC_STANDARD_RESOURCES];">
   <!ENTITY FORECAST_RESOURCES "&@[FORECAST_RESOURCES:-FORECAST_RESOURCES_regional_40x30io3x72_omp2];">
   <!ENTITY FORECAST_ENS_RESOURCES "&@[FORECAST_ENS_RESOURCES:-FORECAST_ENS_RESOURCES_regional_40x30io3x72_omp2];">
 
@@ -776,7 +779,7 @@
 
 @** endif
 
-  <task name="forecast" maxtries="&MAX_TRIES;">
+  <task name="forecast" maxtries="&MAX_TRIES_BIG_JOBS;">
     <command>&JOBhafs;/JHAFS_FORECAST</command>
     <jobname>hafs_forecast_&SID;_<cyclestr>@Y@m@d@H</cyclestr></jobname>
     <join><cyclestr>&WORKhafs;/hafs_forecast.log</cyclestr></join>
@@ -973,6 +976,29 @@
       </and>
     </dependency>
   </task>
+
+@** if RUN_PYGRAF==YES
+  <task name="pygraf" maxtries="&MAX_TRIES;">
+    <command>&JOBhafs;/JHAFS_PYGRAF</command>
+    <jobname>hafs_pygraf_&SID;_<cyclestr>@Y@m@d@H</cyclestr></jobname>
+    <join><cyclestr>&WORKhafs;/hafs_pygraf.log</cyclestr></join>
+    <account>&ACCOUNT;</account>
+    &RESERVATION;
+    <queue>&QUEUE_PE;</queue>
+    &PE_EXTRA;
+    &CORES_EXTRA;
+    &PYGRAF_RESOURCES;
+    &ENV_VARS;
+
+    <dependency>
+      <!-- Pygraf graphics are presently setup to run after all grib files are available -->
+      <and>
+        <streq><left>&RUN_DATM;</left><right>NO</right></streq>
+        <metataskdep metatask="atm_post"/>
+      </and>
+    </dependency>
+  </task>
+@** endif
 
   <task name="output" maxtries="&MAX_TRIES;">
     <command>&JOBhafs;/JHAFS_OUTPUT</command>
@@ -1595,6 +1621,9 @@
 @** if RUN_EMCGRAPHICS==YES
         <taskdep task="emcgraphics"/>
 @** endif
+@** if RUN_PYGRAF==YES
+        <taskdep task="pygraf"/>
+@** endif
 @** if RUN_ENSDA==YES
         <metataskdep metatask="product_ens"/>
 @** endif
@@ -1640,6 +1669,9 @@
 @** if RUN_EMCGRAPHICS==YES
         <taskdep task="emcgraphics"/>
 @** endif
+@** if RUN_PYGRAF==YES
+        <taskdep task="pygraf"/>
+@** endif
 @** if RUN_ENSDA==YES
         <metataskdep metatask="product_ens"/>
 @** endif
@@ -1676,6 +1708,12 @@
           <taskdep task="forecast" cycle_offset="6:00:00"/>
           <taskdep task="scrub_work" cycle_offset="6:00:00"/>
         </or>
+        <or>
+          <not><cycleexistdep cycle_offset="12:00:00"/></not>
+          <taskdep task="forecast" state="RUNNING" cycle_offset="12:00:00"/>
+          <taskdep task="forecast" cycle_offset="12:00:00"/>
+          <taskdep task="scrub_work" cycle_offset="12:00:00"/>
+        </or>
       </and>
     </dependency>
   </task>
@@ -1707,6 +1745,15 @@
             <taskdep task="archive_tape" cycle_offset="6:00:00"/>
             <taskdep task="archive_disk" cycle_offset="6:00:00"/>
             <datadep age="&COM_SCRUB_TIME;"><cyclestr offset="6:00:00">&COMhafs;/&STORMLABEL;.done</cyclestr></datadep>
+          </and>
+          <taskdep task="scrub_com" cycle_offset="6:00:00"/>
+        </or>
+        <or>
+          <not><cycleexistdep cycle_offset="12:00:00"/></not>
+          <and>
+            <taskdep task="archive_tape" cycle_offset="12:00:00"/>
+            <taskdep task="archive_disk" cycle_offset="12:00:00"/>
+            <datadep age="&COM_SCRUB_TIME;"><cyclestr offset="12:00:00">&COMhafs;/&STORMLABEL;.done</cyclestr></datadep>
           </and>
           <taskdep task="scrub_com" cycle_offset="6:00:00"/>
         </or>

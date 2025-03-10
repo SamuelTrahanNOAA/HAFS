@@ -65,6 +65,7 @@ if [ "${ENSDA}" = YES ]; then
   write_tasks_per_group=${write_tasks_per_group_ens:-72}
   write_dopost=${write_dopost_ens:-.false.}
   output_history=${output_history_ens:-.true.}
+  twowaynest=${twowaynest_ens:-.true.}
   glob_k_split=${glob_k_split_ens:-1}
   glob_n_split=${glob_n_split_ens:-7}
   glob_layoutx=${glob_layoutx_ens:-12}
@@ -83,6 +84,13 @@ if [ "${ENSDA}" = YES ]; then
   glob_n_zs_filter=${glob_n_zs_filter_ens:-1}
   glob_n_del2_weak=${glob_n_del2_weak_ens:-20}
   glob_max_slope=${glob_max_slope_ens:-0.25}
+  glob_kord_tm=${glob_kord_tm_ens:--11}
+  glob_kord_mt=${glob_kord_mt_ens:-11}
+  glob_kord_wz=${glob_kord_wz_ens:-11}
+  glob_kord_tr=${glob_kord_tr_ens:-11}
+  glob_fv_core_tau=${glob_fv_core_tau:-10.}
+  glob_rf_cutoff=${glob_rf_cutoff:-10.}
+  glob_fast_tau_w_sec=${glob_fast_tau_w_sec:-0.2}
   glob_rlmx=${glob_rlmx_ens:-300.}
   glob_elmx=${glob_elmx_ens:-300.}
   glob_sfc_rlm=${glob_sfc_rlm_ens:-1}
@@ -107,6 +115,13 @@ if [ "${ENSDA}" = YES ]; then
   n_zs_filter=${n_zs_filter_ens:-1}
   n_del2_weak=${n_del2_weak_ens:-20}
   max_slope=${max_slope_ens:-0.25}
+  kord_tm=${kord_tm_ens:--11,-11}
+  kord_mt=${kord_mt_ens:-11,11}
+  kord_wz=${kord_wz_ens:-11,11}
+  kord_tr=${kord_tr_ens:-11,11}
+  fv_core_tau=${fv_core_tau:-10.}
+  rf_cutoff=${rf_cutoff:-10.}
+  fast_tau_w_sec=${fast_tau_w_sec:-0.2}
   rlmx=${rlmx_ens:-300.}
   elmx=${elmx_ens:-300.}
   sfc_rlm=${sfc_rlm_ens:-1}
@@ -121,6 +136,59 @@ if [ "${ENSDA}" = YES ]; then
   output_grid_dlat_ens=${output_grid_dlat_ens:-$(awk "BEGIN {print ${output_grid_dlat:-0.025}*${GRID_RATIO_ENS:-1}}")}
   output_grid_dlon=${output_grid_dlon_ens}
   output_grid_dlat=${output_grid_dlat_ens}
+
+  # Additional physics settings
+  glob_sedi_semi=${glob_sedi_semi_ens:-.true.}
+  glob_cnvgwd=${glob_cnvgwd_ens:-.true.}
+  glob_imfshalcnv=${glob_imfshalcnv_ens:-.true.}
+  glob_imfdeepcnv=${glob_imfdeepcnv_ens:-.true.}
+  sedi_semi=${sedi_semi_ens:-.true.}
+  cnvgwd=${cnvgwd_ens:-.true.}
+  imfshalcnv=${imfshalcnv_ens:-.true.}
+  imfdeepcnv=${imfdeepcnv_ens:-.true.}
+
+  # Smoke/Dust settings (GFS_typedefs.F90 namelist defaults)
+  glob_seas_opt=${glob_seas_opt_ens:-2}
+  glob_dust_opt=${glob_dust_opt_ens:-1}
+  glob_drydep_opt=${glob_drydep_opt_ens:-1}
+  glob_coarsepm_settling=${glob_drydep_opt_ens:-1}
+  glob_plume_wind_eff=${glob_plume_wind_eff_ens:-1}
+  glob_extended_sd_diags=${glob_extended_sd_diags_ens:-.false.}
+  glob_wetdep_ls_opt=${glob_wetdep_ls_opt_ens:-1}
+  glob_do_plumerise=${glob_do_plumerise_ens:-.false.}
+  glob_addsmoke_flag=${glob_addsmoke_flag_ens:-1}
+  glob_plumerisefire_frq=${glob_plumerisefire_frq_ens:-60}
+  glob_n_dbg_lines=${glob_n_dbg_lines_ens:-3}
+  glob_smoke_forecast=${glob_smoke_forecast_ens:-0}
+  glob_aero_ind_fdb=${glob_aero_ind_fdb_ens:-.false.}
+  glob_aero_dir_fdb=${glob_aero_dir_fdb_ens:-.false.}
+  glob_rrfs_smoke_debug=${glob_rrfs_smoke_debug_ens:-.false.}
+  glob_do_smoke_transport=${glob_do_smoke_transport_ens:-.true.}
+  glob_mix_chem=${glob_mix_chem_ens:-.false.}
+  glob_enh_mix=${glob_enh_mix_ens:-.false.}
+
+  seas_opt=${seas_opt_ens:-2}
+  dust_opt=${dust_opt_ens:-1}
+  drydep_opt=${drydep_opt_ens:-1}
+  coarsepm_settling=${drydep_opt_ens:-1}
+  plume_wind_eff=${plume_wind_eff_ens:-1}
+  extended_sd_diags=${extended_sd_diags_ens:-.false.}
+  wetdep_ls_opt=${wetdep_ls_opt_ens:-1}
+  do_plumerise=${do_plumerise_ens:-.false.}
+  addsmoke_flag=${addsmoke_flag_ens:-1}
+  plumerisefire_frq=${plumerisefire_frq_ens:-60}
+  n_dbg_lines=${n_dbg_lines_ens:-3}
+  smoke_forecast=${smoke_forecast_ens:-0}
+  aero_ind_fdb=${aero_ind_fdb_ens:-.false.}
+  aero_dir_fdb=${aero_dir_fdb_ens:-.false.}
+  rrfs_smoke_debug=${rrfs_smoke_debug_ens:-.false.}
+  do_smoke_transport=${do_smoke_transport_ens:-.true.}
+  mix_chem=${mix_chem_ens:-.false.}
+  enh_mix=${enh_mix_ens:-.false.}
+
+  ## Lighting threat index diagnostic (GFS_typedefs.F90 namelist defaults)
+  glob_lightning_threat=${glob_lightning_threat_ens:-.false.}
+  lightning_threat=${lightning_threat_ens:-.false.}
 fi
 
 iseed1=$(echo $CDATE $ENSID | awk '{print $1*1000+$2*10+3}')
@@ -165,6 +233,7 @@ warm_start=${warm_start:-.false.}
 warm_start_opt=${warm_start_opt:-0}
 warmstart_from_restart=${warmstart_from_restart:-no}
 RESTARTinp=${RESTARTinp:-"UNNEEDED"}
+twowaynest=${twowaynest:-.true.}
 
 if [ ${warm_start_opt} -eq 0 ]; then
   warmstart_from_restart=no
@@ -398,7 +467,7 @@ if [ $gtype = regional ]; then
   if [ $quilting = .true. ]; then
     ATM_tasks=$(($ATM_tasks+$write_groups*$write_tasks_per_group))
   fi
-elif [ $gtype = nest ]; then
+elif [ $gtype = nest ] || [ $gtype = stretch ] || [ $gtype = uniform ]; then
   ATM_tasks=$(( ${glob_layoutx} * ${glob_layouty} * 6 ))
   for n in $(seq 1 ${nest_grids}); do
     layoutx_tmp=$( echo ${layoutx} | cut -d , -f ${n} )
@@ -810,6 +879,8 @@ ${NLN} $FIXam/global_shdmin.0.144x0.144.grb .
 ${NLN} $FIXam/global_shdmax.0.144x0.144.grb .
 ${NLN} $FIXam/global_slope.1x1.grb .
 ${NLN} $FIXam/global_mxsnoalb.uariz.t1534.3072.1536.rg.grb .
+${NLN} $FIXam/ugwp_limb_tau.nc .
+${NLN} $PARMhafs/noahmptable.tbl .
 
 for file in $(ls ${FIXam}/fix_co2_proj/global_co2historicaldata*); do
   ${NLN} $file $(echo $(basename $file) | sed -e "s/global_//g")
@@ -835,7 +906,7 @@ if [ ${imp_physics:-11} = 8 ]; then
   ${NLN} ${FIXam}/freezeH2O.dat ./
 fi
 
-if [ $gtype = nest ]; then
+if [ $gtype = nest ] || [ $gtype = stretch ] || [ $gtype = uniform ]; then
 
 cd ./INPUT
 
@@ -892,15 +963,24 @@ cd ..
 # Prepare diag_table, field_table, input.nml, input_nest02.nml, model_configure, and ufs.configure
 ${NCP} ${PARMforecast}/diag_table.tmp .
 if [ ${imp_physics:-11} = 8 ]; then
-  ${NCP} ${PARMforecast}/field_table_thompson ./field_table
+  if [ ${ltaerosol} = .true. ]; then
+    ${NCP} ${PARMforecast}/field_table_thompson_aero ./field_table
+  else
+    ${NCP} ${PARMforecast}/field_table_thompson ./field_table
+  fi
 else
   ${NCP} ${PARMforecast}/field_table .
 fi
-if [ ${progsigma:-.false.} = .true. ] || [ ${progsigma:-.false.} = .T. ]; then
-  cat ${PARMforecast}/field_progsigma >> ./field_table
+if [ ${progsigma:-.false.} = .true. ] || [ ${progsigma_nest:-.false.} = .true. ] \
+  || [ ${progsigma:-.false.} = T ] || [ ${progsigma_nest:-.false.} = T ] ; then
+  cat ${PARMforecast}/field_table_addition_progsigma >> field_table
 fi
-${NCP} ${PARMforecast}/input.nml.tmp .
-${NCP} ${PARMforecast}/input_nest.nml.tmp .
+if [ $gtype = stretch ] || [ $gtype = uniform ]; then
+  ${NCP} ${PARMforecast}/input.nml.nonest.tmp  input.nml.tmp
+else
+  ${NCP} ${PARMforecast}/input.nml.tmp .
+  ${NCP} ${PARMforecast}/input_nest.nml.tmp .
+fi
 ${NCP} ${PARMforecast}/model_configure.tmp .
 ${NCP} ${PARMforecast}/ufs.configure.atmonly ./ufs.configure
 
@@ -947,6 +1027,13 @@ full_zs_filter_nml=${glob_full_zs_filter:-.true.}
 n_zs_filter_nml=${glob_n_zs_filter:-1}
 n_del2_weak_nml=${glob_n_del2_weak:-20}
 max_slope_nml=${glob_max_slope:-0.25}
+kord_tm_nml=${glob_kord_tm:--11}
+kord_mt_nml=${glob_kord_mt:-11}
+kord_wz_nml=${glob_kord_wz:-11}
+kord_tr_nml=${glob_kord_tr:-11}
+fv_core_tau=${glob_fv_core_tau:-10.}
+rf_cutoff=${glob_rf_cutoff:-10.}
+fast_tau_w_sec=${glob_fast_tau_w_sec:-0.2}
 rlmx_nml=${glob_rlmx:-300.}
 elmx_nml=${glob_elmx:-300.}
 sfc_rlm_nml=${glob_sfc_rlm:-1}
@@ -954,6 +1041,50 @@ tc_pbl_nml=${glob_tc_pbl:-0}
 shal_cnv_nml=${glob_shal_cnv:-.true.}
 do_deep_nml=${glob_do_deep:-.true.}
 blocksize=$(( ${npy_nml}/${layouty_nml} ))
+
+sedi_semi_nml=${glob_sedi_semi:-.true.}
+cnvgwd_nml=${glob_cnvgwd:-.true.}
+imfshalcnv_nml=${glob_imfshalcnv:-.true.}
+imfdeepcnv_nml=${glob_imfdeepcnv:-.true.}
+seas_opt_nml=${glob_seas_opt:-2}
+dust_opt_nml=${glob_dust_opt:-1}
+drydep_opt_nml=${glob_drydep_opt:-1}
+coarsepm_settling_ens_nml=${glob_coarsepm_settling_ens:-1}
+plume_wind_eff_nml=${glob_plume_wind_eff:-1}
+extended_sd_diags_nml=${glob_extended_sd_diags:-.false.}
+wetdep_ls_opt_nml=${glob_wetdep_ls_opt:-1}
+do_plumerise_nml=${glob_do_plumerise:-.false.}
+addsmoke_flag_nml=${glob_addsmoke_flag:-1}
+plumerisefire_frq_nml=${glob_plumerisefire_frq:-60}
+n_dbg_lines_nml=${glob_n_dbg_lines:-3}
+smoke_forecast_nml=${glob_smoke_forecast:-0}
+aero_ind_fdb_nml=${glob_aero_ind_fdb:-.false.}
+aero_dir_fdb_nml=${glob_aero_dir_fdb:-.false.}
+rrfs_smoke_debug_nml=${glob_rrfs_smoke_debug:-.false.}
+do_smoke_transport_nml=${glob_do_smoke_transport:-.true.}
+mix_chem_nml=${glob_mix_chem:-.false.}
+enh_mix_nml=${glob_enh_mix:-.false.}
+
+lightning_threat_nml=${glob_lightning_threat:-.false.}
+
+ltaerosol=${ltaerosol:-.false.}
+satmedmf=${satmedmf:-.true.}
+do_mynnedmf=${do_mynnedmf:-.false.}
+do_mynnsfclay=${do_mynnsfclay:-.false.}
+cdmbgwd=${cdmbgwd:-1.0,1.0,1.0,1.0}
+iopt_sfc=${iopt_sfc:-3}
+gwd_opt=${gwd_opt:-2}
+do_ugwp_v0=${do_ugwp_v0:-.false.}
+do_ugwp_v1=${do_ugwp_v1:-.false.}
+do_ugwp_v0_orog_only=${do_ugwp_v0_orog_only:-.false.}
+do_ugwp_v0_nst_only=${do_ugwp_v0_nst_only:-.true.}
+do_ugwp_v1_w_gsldrag=${do_ugwp_v1_w_gsldrag:-.false.}
+do_ugwp_v1_orog_only=${do_ugwp_v1_orog_only:-.false.}
+do_gsl_drag_ls_bl=${do_gsl_drag_ls_bl:-.true.}
+do_gsl_drag_ss=${do_gsl_drag_ss:-.true.}
+do_gsl_drag_tofd=${do_gsl_drag_tofd:-.true.}
+bl_mynn_tkeadvect=${bl_mynn_tkeadvect:-.false.}
+
 atparse < input.nml.tmp > input.nml
 
 for n in $(seq 1 ${nest_grids}); do
@@ -977,7 +1108,43 @@ for n in $(seq 1 ${nest_grids}); do
   n_zs_filter_nml=$( echo ${n_zs_filter} | cut -d , -f ${n} )
   n_del2_weak_nml=$( echo ${n_del2_weak} | cut -d , -f ${n} )
   max_slope_nml=$( echo ${max_slope} | cut -d , -f ${n} )
+  kord_tm_nml=$( echo ${kord_tm} | cut -d , -f ${n} )
+  kord_mt_nml=$( echo ${kord_mt} | cut -d , -f ${n} )
+  kord_wz_nml=$( echo ${kord_wz} | cut -d , -f ${n} )
+  kord_tr_nml=$( echo ${kord_tr} | cut -d , -f ${n} )
+  fv_core_tau=$( echo ${fv_core_tau} | cut -d , -f ${n} )
+  rf_cutoff=$( echo ${rf_cutoff} | cut -d , -f ${n} )
+  fast_tau_w_sec=$( echo ${fast_tau_w_sec} | cut -d , -f ${n} )
   blocksize=$(( ${npy_nml}/${layouty_nml} ))
+
+  sedi_semi_nml=$( echo ${sedi_semi} | cut -c , -f ${n} )
+  cnvgwd_nml=$( echo ${cnvgwd} | cut -d , -f ${n} )
+  imfshalcnv_nml=$( echo ${imfshalcnv} | cut -d , -f ${n} )
+  imfdeepcnv_nml=$( echo ${imfdeepcnv} | cut -d , -f ${n} )
+
+  # Smoke/dust
+  seas_opt_nml=$( echo ${seas_opt} | cut -d , -f ${n} )
+  dust_opt_nml=$( echo ${dust_opt} | cut -d , -f ${n} )
+  drydep_opt_nml=$( echo ${drydep_opt} | cut -d , -f ${n} )
+  coarsepm_settling_nml=$( echo ${coarsepm_settling} | cut -d , -f ${n} )
+  plume_wind_eff_nml=$( echo ${plume_wind_eff} | cut -d , -f ${n} )
+  extended_sd_diags_nml=$( echo ${extended_sd_diags} | cut -d , -f ${n} )
+  wetdep_ls_opt_nml=$( echo ${wetdep_ls_opt} | cut -d , -f ${n} )
+  do_plumerise_nml=$( echo ${do_plumerise} | cut -d , -f ${n} )
+  addsmoke_flag_nml=$( echo ${addsmoke_flag} | cut -d , -f ${n} )
+  plumerisefire_frq_nml=$( echo ${plumerisefire_frq} | cut -d , -f ${n} )
+  n_dbg_lines_nml=$( echo ${n_dbg_lines} | cut -d , -f ${n} )
+  smoke_forecast_nml=$( echo ${smoke_forecast} | cut -d , -f ${n} )
+  aero_ind_fdb_nml=$( echo ${aero_ind_fdb} | cut -d , -f ${n} )
+  aero_dir_fdb_nml=$( echo ${aero_dir_fdb} | cut -d , -f ${n} )
+  rrfs_smoke_debug_nml=$( echo ${rrfs_smoke_debug} | cut -d , -f ${n} )
+  do_smoke_transport_nml=$( echo ${do_smoke_transport} | cut -d , -f ${n} )
+  mix_chem_nml=$( echo ${mix_chem} | cut -d , -f ${n} )
+  enh_mix_nml=$( echo ${enh_mix} | cut -d , -f ${n} )
+
+  # Lightning threat index
+  lightning_threat_nml=$( echo ${lightning_threat} | cut -d , -f ${n} )
+
   atparse < input_nest.nml.tmp > input_nest0${inest}.nml
 done
 
@@ -1068,15 +1235,18 @@ if [ ! ${FORECAST_RESTART} = YES ] && [ ${warmstart_from_restart} = yes ]; then
   ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_srf_wnd.res.tile1.nc ./fv_srf_wnd.res.tile1.nc
   ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_core.res.tile1.nc ./fv_core.res.tile1.nc
   ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_tracer.res.tile1.nc ./fv_tracer.res.tile1.nc
-# ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.phy_data.nc ./phy_data.nc
-# ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.sfc_data.nc ./sfc_data.nc
+  rm -f phy_data.nc sfc_data.nc
+  ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.phy_data.nc ./phy_data.nc
+  ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.sfc_data.nc ./sfc_data.nc
   for n in $(seq 2 ${nest_grids}); do
     ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_core.res.nest$(printf %02d ${n}).nc ./fv_core.res.nest$(printf %02d ${n}).nc
     ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_srf_wnd.res.nest$(printf %02d ${n}).tile${n}.nc ./fv_srf_wnd.res.nest$(printf %02d ${n}).tile${n}.nc
     ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_core.res.nest$(printf %02d ${n}).tile${n}.nc ./fv_core.res.nest$(printf %02d ${n}).tile${n}.nc
     ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_tracer.res.nest$(printf %02d ${n}).tile${n}.nc ./fv_tracer.res.nest$(printf %02d ${n}).tile${n}.nc
-  # ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.phy_data.nest$(printf %02d ${n}).tile${n}.nc ./phy_data.nest$(printf %02d ${n}).tile${n}.nc
-  # ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.sfc_data.nest$(printf %02d ${n}).tile${n}.nc ./sfc_data.nest$(printf %02d ${n}).tile${n}.nc
+    rm -f ./phy_data.nest$(printf %02d ${n}).tile${n}.nc
+    ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.phy_data.nest$(printf %02d ${n}).tile${n}.nc ./phy_data.nest$(printf %02d ${n}).tile${n}.nc
+    rm -f ./sfc_data.nest$(printf %02d ${n}).tile${n}.nc
+    ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.sfc_data.nest$(printf %02d ${n}).tile${n}.nc ./sfc_data.nest$(printf %02d ${n}).tile${n}.nc
   # if [ -e ${RESTARTinp}/${YMD}.${hh}0000.fv_BC_ne.res.nest$(printf %02d ${n}).nc ]; then
   #   ${NLN} ${RESTARTinp}/${YMD}.${hh}0000.fv_BC_ne.res.nest$(printf %02d ${n}).nc ./fv_BC_ne.res.nest$(printf %02d ${n}).nc
   # fi
@@ -1118,15 +1288,24 @@ cd ..
 # Prepare diag_table, field_table, input.nml, input_nest02.nml, model_configure, and ufs.configure
 ${NCP} ${PARMforecast}/diag_table.tmp .
 if [ ${imp_physics:-11} = 8 ]; then
-  ${NCP} ${PARMforecast}/field_table_thompson ./field_table
+  if [ ${ltaerosol} = .true. ]; then
+    ${NCP} ${PARMforecast}/field_table_thompson_aero ./field_table
+  else
+    ${NCP} ${PARMforecast}/field_table_thompson ./field_table
+  fi
 else
   ${NCP} ${PARMforecast}/field_table .
 fi
-if [ ${progsigma:-.false.} = .true. ] || [ ${progsigma:-.false.} = .T. ]; then
-  cat ${PARMforecast}/field_progsigma >> ./field_table
+if [ ${progsigma:-.false.} = .true. ] || [ ${progsigma_nest:-.false.} = .true. ] \
+  || [ ${progsigma:-.false.} = T ] || [ ${progsigma_nest:-.false.} = T ] ; then
+  cat ${PARMforecast}/field_table_addition_progsigma >> field_table
 fi
-${NCP} ${PARMforecast}/input.nml.tmp .
-${NCP} ${PARMforecast}/input_nest.nml.tmp .
+if [ $gtype = stretch ] || [ $gtype = uniform ]; then
+  ${NCP} ${PARMforecast}/input.nml.nonest.tmp  input.nml.tmp
+else
+  ${NCP} ${PARMforecast}/input.nml.tmp .
+  ${NCP} ${PARMforecast}/input_nest.nml.tmp .
+fi
 ${NCP} ${PARMforecast}/model_configure.tmp .
 
 # NoahMP table file
@@ -1250,8 +1429,15 @@ full_zs_filter_nml=$( echo ${full_zs_filter} | cut -d , -f ${n} )
 n_zs_filter_nml=$( echo ${n_zs_filter} | cut -d , -f ${n} )
 n_del2_weak_nml=$( echo ${n_del2_weak} | cut -d , -f ${n} )
 max_slope_nml=$( echo ${max_slope} | cut -d , -f ${n} )
+kord_tm_nml=$( echo ${kord_tm} | cut -d , -f ${n} )
+kord_mt_nml=$( echo ${kord_mt} | cut -d , -f ${n} )
+kord_wz_nml=$( echo ${kord_wz} | cut -d , -f ${n} )
+kord_tr_nml=$( echo ${kord_tr} | cut -d , -f ${n} )
 rlmx_nml=$( echo ${rlmx} | cut -d , -f ${n} )
 elmx_nml=$( echo ${elmx} | cut -d , -f ${n} )
+fv_core_tau=$( echo ${fv_core_tau} | cut -d , -f ${n} )
+rf_cutoff=$( echo ${rf_cutoff} | cut -d , -f ${n} )
+fast_tau_w_sec=$( echo ${fast_tau_w_sec} | cut -d , -f ${n} )
 sfc_rlm_nml=$( echo ${sfc_rlm} | cut -d , -f ${n} )
 tc_pbl_nml=$( echo ${tc_pbl} | cut -d , -f ${n} )
 shal_cnv_nml=$( echo ${shal_cnv} | cut -d , -f ${n} )
@@ -1259,6 +1445,35 @@ do_deep_nml=$( echo ${do_deep} | cut -d , -f ${n} )
 bc_update_interval=${NBDYHRS}
 nrows_blend=${halo_blend}
 blocksize=$(( ${npy_nml}/${layouty_nml} ))
+
+sedi_semi_nml=$( echo ${sedi_semi} | cut -d , -f ${n} )
+cnvgwd_nml=$( echo ${cnvgwd} | cut -d , -f ${n} )
+imfshalcnv_nml=$( echo ${imfshalcnv} | cut -d , -f ${n} )
+imfdeepcnv_nml=$( echo ${imfdeepcnv} | cut -d , -f ${n} )
+
+# Smoke/dust
+seas_opt_nml=$( echo ${seas_opt} | cut -d , -f ${n} )
+dust_opt_nml=$( echo ${dust_opt} | cut -d , -f ${n} )
+drydep_opt_nml=$( echo ${drydep_opt} | cut -d , -f ${n} )
+coarsepm_settling_nml=$( echo ${coarsepm_settling} | cut -d , -f ${n} )
+plume_wind_eff_nml=$( echo ${plume_wind_eff} | cut -d , -f ${n} )
+extended_sd_diags_nml=$( echo ${extended_sd_diags} | cut -d , -f ${n} )
+wetdep_ls_opt_nml=$( echo ${wetdep_ls_opt} | cut -d , -f ${n} )
+do_plumerise_nml=$( echo ${do_plumerise} | cut -d , -f ${n} )
+addsmoke_flag_nml=$( echo ${addsmoke_flag} | cut -d , -f ${n} )
+plumerisefire_frq_nml=$( echo ${plumerisefire_frq} | cut -d , -f ${n} )
+n_dbg_lines_nml=$( echo ${n_dbg_lines} | cut -d , -f ${n} )
+smoke_forecast_nml=$( echo ${smoke_forecast} | cut -d , -f ${n} )
+aero_ind_fdb_nml=$( echo ${aero_ind_fdb} | cut -d , -f ${n} )
+aero_dir_fdb_nml=$( echo ${aero_dir_fdb} | cut -d , -f ${n} )
+rrfs_smoke_debug_nml=$( echo ${rrfs_smoke_debug} | cut -d , -f ${n} )
+do_smoke_transport_nml=$( echo ${do_smoke_transport} | cut -d , -f ${n} )
+mix_chem_nml=$( echo ${mix_chem} | cut -d , -f ${n} )
+enh_mix_nml=$( echo ${enh_mix} | cut -d , -f ${n} )
+
+# Lightning threat index
+lightning_threat_nml=$( echo ${lightning_threat} | cut -d , -f ${n} )
+
 atparse < input.nml.tmp > input.nml
 
 for n in $(seq 2 ${nest_grids}); do
@@ -1282,6 +1497,13 @@ for n in $(seq 2 ${nest_grids}); do
   n_zs_filter_nml=$( echo ${n_zs_filter} | cut -d , -f ${n} )
   n_del2_weak_nml=$( echo ${n_del2_weak} | cut -d , -f ${n} )
   max_slope_nml=$( echo ${max_slope} | cut -d , -f ${n} )
+  kord_tm_nml=$( echo ${kord_tm} | cut -d , -f ${n} )
+  kord_mt_nml=$( echo ${kord_mt} | cut -d , -f ${n} )
+  kord_wz_nml=$( echo ${kord_wz} | cut -d , -f ${n} )
+  kord_tr_nml=$( echo ${kord_tr} | cut -d , -f ${n} )
+  fv_core_tau=$( echo ${fv_core_tau} | cut -d , -f ${n} )
+  rf_cutoff=$( echo ${rf_cutoff} | cut -d , -f ${n} )
+  fast_tau_w_sec=$( echo ${fast_tau_w_sec} | cut -d , -f ${n} )
   rlmx_nml=$( echo ${rlmx} | cut -d , -f ${n} )
   elmx_nml=$( echo ${elmx} | cut -d , -f ${n} )
   sfc_rlm_nml=$( echo ${sfc_rlm} | cut -d , -f ${n} )
@@ -1289,6 +1511,35 @@ for n in $(seq 2 ${nest_grids}); do
   shal_cnv_nml=$( echo ${shal_cnv} | cut -d , -f ${n} )
   do_deep_nml=$( echo ${do_deep} | cut -d , -f ${n} )
   blocksize=$(( ${npy_nml}/${layouty_nml} ))
+
+  sedi_semi_nml=$( echo ${sedi_semi} | cut -d , -f ${n} )
+  cnvgwd_nml=$( echo ${cnvgwd} | cut -d , -f ${n} )
+  imfshalcnv_nml=$( echo ${imfshalcnv} | cut -d , -f ${n} )
+  imfdeepcnv_nml=$( echo ${imfdeepcnv} | cut -d , -f ${n} )
+
+  # Smoke/dust
+  seas_opt_nml=$( echo ${seas_opt} | cut -d , -f ${n} )
+  dust_opt_nml=$( echo ${dust_opt} | cut -d , -f ${n} )
+  drydep_opt_nml=$( echo ${drydep_opt} | cut -d , -f ${n} )
+  coarsepm_settling_nml=$( echo ${coarsepm_settling} | cut -d , -f ${n} )
+  plume_wind_eff_nml=$( echo ${plume_wind_eff} | cut -d , -f ${n} )
+  extended_sd_diags_nml=$( echo ${extended_sd_diags} | cut -d , -f ${n} )
+  wetdep_ls_opt_nml=$( echo ${wetdep_ls_opt} | cut -d , -f ${n} )
+  do_plumerise_nml=$( echo ${do_plumerise} | cut -d , -f ${n} )
+  addsmoke_flag_nml=$( echo ${addsmoke_flag} | cut -d , -f ${n} )
+  plumerisefire_frq_nml=$( echo ${plumerisefire_frq} | cut -d , -f ${n} )
+  n_dbg_lines_nml=$( echo ${n_dbg_lines} | cut -d , -f ${n} )
+  smoke_forecast_nml=$( echo ${smoke_forecast} | cut -d , -f ${n} )
+  aero_ind_fdb_nml=$( echo ${aero_ind_fdb} | cut -d , -f ${n} )
+  aero_dir_fdb_nml=$( echo ${aero_dir_fdb} | cut -d , -f ${n} )
+  rrfs_smoke_debug_nml=$( echo ${rrfs_smoke_debug} | cut -d , -f ${n} )
+  do_smoke_transport_nml=$( echo ${do_smoke_transport} | cut -d , -f ${n} )
+  mix_chem_nml=$( echo ${mix_chem} | cut -d , -f ${n} )
+  enh_mix_nml=$( echo ${enh_mix} | cut -d , -f ${n} )
+
+  # Lightning threat index
+  lightning_threat_nml=$( echo ${lightning_threat} | cut -d , -f ${n} )
+
   if [ ${RUN_GSI:-NO} = "YES" ] && [ ${GSI_D02:-NO} = "YES" ] && \
      [ ${RUN_INIT:-NO} = "NO" ] && [ ${iau_regional:-.false.} = ".true." ]; then
     iau_inc_files="analysis_inc_nest0${inest}.nc"
@@ -1561,13 +1812,15 @@ NUM_FILES=2
 FILENAME_BASE="'atm' 'sfc'"
 OUTPUT_FILE="'netcdf_parallel' 'netcdf_parallel'"
 #OUTPUT_FILE="'netcdf' 'netcdf'"
-IDEFLATE=1
+IDEFLATE=${ideflate:-1}
+ZSTANDARD_LEVEL=${zstandard_level:-1}
 QUANTIZE_NSD=0
 OUTPUT_FH="${NOUTHRS:-3} -1"
+NBITS=0
 
 if [ $gtype = regional ]; then
   ngrids=${nest_grids}
-elif [ $gtype = nest ]; then
+elif [ $gtype = nest ] || [ $gtype = stretch ] || [ $gtype = uniform ]; then
   ngrids=$(( ${nest_grids} + 1 ))
 else
   echo "FATAL ERROR: Unsupported gtype of ${gtype}. Currently onnly support gtype of nest or regional."
@@ -1649,8 +1902,8 @@ if [ ${write_dopost:-.false.} = .true. ]; then
   ${NCP} ${PARMhafs}/post/itag ./itag
   ${NCP} ${PARMhafs}/post/params_grib2_tbl_new ./params_grib2_tbl_new
   if [ ${satpost:-.false.} = .true. ]; then
-    ${NCP} ${PARMhafs}/post/postxconfig-NT-hafs.txt ./postxconfig-NT.txt
-    ${NCP} ${PARMhafs}/post/postxconfig-NT-hafs.txt ./postxconfig-NT_FH00.txt
+    ${NCP} ${postxconfig_satpost} ./postxconfig-NT.txt
+    ${NCP} ${postxconfig_satpost} ./postxconfig-NT_FH00.txt
     # Link crtm fix files
     for file in "amsre_aqua" "imgr_g11" "imgr_g12" "imgr_g13" \
       "imgr_g15" "imgr_mt1r" "imgr_mt2" "seviri_m10" \
@@ -1675,8 +1928,8 @@ if [ ${write_dopost:-.false.} = .true. ]; then
       ${NLN} ${file} ./
     done
   else
-    ${NCP} ${PARMhafs}/post/postxconfig-NT-hafs_nosat.txt ./postxconfig-NT.txt
-    ${NCP} ${PARMhafs}/post/postxconfig-NT-hafs_nosat.txt ./postxconfig-NT_FH00.txt
+    ${NCP} ${postxconfig_nosat} ./postxconfig-NT.txt
+    ${NCP} ${postxconfig_nosat} ./postxconfig-NT_FH00.txt
   fi
 fi
 

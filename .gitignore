@@ -14,3 +14,7 @@
 system.conf
 fix/
 rocoto/*.xml
+
+# Ignore patch original and reject files
+*.orig
+*.rej

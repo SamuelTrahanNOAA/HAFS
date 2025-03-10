@@ -103,7 +103,12 @@ def where():
         elif os.path.exists('/gpfs/f6'):
             here=NOAAGaeaC6()
         elif os.path.exists('/lustre/f2'):
-            here=NOAAGAEA()
+            with open("/proc/cpuinfo", "rt") as fd:
+                is_amd=fd.read(3000).find('EPYC') >= 0
+            if is_amd:
+                here=NOAAGAEAC5()
+            else:
+                here=NOAAGAEA()
         else:
             here=Cluster(False,False,False,'noname','noname')
     return here
@@ -188,6 +193,14 @@ class NOAAGaeaC6(Cluster):
     def __init__(self):
         """!constructor for NOAAGaeaC6"""
         super(NOAAGaeaC6,self).__init__(False,True,False,'gaeac6',
+                                      'gaea.rdhpcs.noaa.gov')
+
+class NOAAGAEAC5(Cluster):
+    """!Represents the NOAA GAEA cluster C5 partition.  Allows ACLs to be used for
+    restricted data, and specifies that group quotas are not in use."""
+    def __init__(self):
+        """!constructor for NOAAGAEAC5"""
+        super(NOAAGAEAC5,self).__init__(False,True,False,'gaea_c5',
                                       'gaea.rdhpcs.noaa.gov')
 
 class NOAAHera(Cluster):
