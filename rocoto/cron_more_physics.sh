@@ -44,6 +44,21 @@ lee_part2='2023091618-2023091712 13L'
 	      config.run=aer3 \
 	      config.run_emcgraphics=yes
 
+ # HAFSv2.1A phase3 with C3
+ confopts="config.EXPT=${EXPT} config.SUBEXPT=${EXPT}_v2p1a_phase3 ../parm/hafsv2p1a_phase3.conf \
+     ../parm/hfsa_thompson_aero.conf \
+     dir.COMrtofs=/lfs/h2/emc/hur/noscrub/hafs-input/COMRTOFSv2.5_new" # wcoss2
+./run_hafs.py ${opts} ${lee_part1} HISTORY \
+	      config.EXPT=${EXPT} \
+	      config.SUBEXPT=v2p1a_phase3_c3 \
+	      config.NHRS=126 \
+	      ${scrubopt} \
+	      ../parm/hafsv2p1a_phase3.conf \
+	      ../parm/hafsv2p1a_c3.conf \
+	      gsi.use_bufr_nr=yes \
+	      config.run=hc3x \
+	      config.run_emcgraphics=yes
+
  # Technical testing
 #./run_hafs.py ${opts} 2024092506-2024092512 09L HISTORY ${confopts} # Helene
 
